@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import KpiGrid from '$lib/components/dashboard/KpiGrid.svelte';
 	import { updateMetrics } from '$lib/stores/metrics';
+	import LineChart from '$lib/components/charts/LineChart.svelte';
+	import GaugeChart from '$lib/components/charts/GaugeChart.svelte';
+	import Heatmap from '$lib/components/charts/Heatmap.svelte';
+	import BarChart from '$lib/components/charts/BarChart.svelte';
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -40,6 +44,17 @@
 		<h2>Rendimiento actual</h2>
 
 		<KpiGrid />
+
+		<div class="charts">
+			<LineChart />
+
+			<div class="chart-grid">
+				<GaugeChart />
+				<BarChart />
+			</div>
+
+			<Heatmap />
+		</div>
 	</section>
 </main>
 
@@ -102,6 +117,36 @@
 		height: 8px;
 		border-radius: 50%;
 		background: #22c55e;
+	}
+
+	.charts {
+	margin-top: 1.5rem;
+	width: 100%;
+	min-width: 0;
+	}
+
+	.chart-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 1.5rem;
+	margin-top: 1.5rem;
+	width: 100%;
+	min-width: 0;
+	}
+
+	.chart-grid > * {
+		min-width: 0;
+		width: 100%;
+	}
+
+	@media (max-width: 900px) {
+		.chart-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	:global(*) {
+	box-sizing: border-box;
 	}
 
 	.dashboard h2 {
