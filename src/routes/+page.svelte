@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import KpiGrid from '$lib/components/dashboard/KpiGrid.svelte';
-	import { updateMetrics } from '$lib/stores/metrics';
 	import LineChart from '$lib/components/charts/LineChart.svelte';
 	import GaugeChart from '$lib/components/charts/GaugeChart.svelte';
 	import Heatmap from '$lib/components/charts/Heatmap.svelte';
 	import BarChart from '$lib/components/charts/BarChart.svelte';
+	import { updateMetrics } from '$lib/stores/metrics';
+	import { connectWebSocket } from '$lib/services/websocket';
 
 	onMount(() => {
-		const interval = setInterval(() => {
-			updateMetrics();
-		}, 3000);
+	const disconnect = connectWebSocket((metric) => {
+		updateMetrics(metric);
+	});
 
-		return () => clearInterval(interval);
+	return disconnect;
 	});
 </script>
 

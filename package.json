@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"server": "node server/server.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -19,6 +20,7 @@
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@types/node": "^24",
+		"@types/ws": "^8.18.1",
 		"eslint": "^10.4.1",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.19.0",
@@ -34,6 +36,7 @@
 	"dependencies": {
 		"chart.js": "^4.5.1",
 		"html2canvas": "^1.4.1",
-		"jspdf": "^4.2.1"
+		"jspdf": "^4.2.1",
+		"ws": "^8.21.3"
 	}
 }

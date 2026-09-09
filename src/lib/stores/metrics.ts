@@ -1,6 +1,5 @@
 import { derived, writable } from 'svelte/store';
 import type { MetricState, WebMetric, MetricStatus } from '$lib/types/metrics';
-import { generateMetric } from '$lib/services/metricSimulator';
 
 function getLcpStatus(value: number): MetricStatus {
 	if (value <= 2500) return 'good';
@@ -36,11 +35,19 @@ function createMetricState(metric: WebMetric): MetricState {
 	};
 }
 
-const firstMetric = generateMetric();
+const initialMetric: WebMetric = {
+	lcp: 0,
+	fid: 0,
+	cls: 0,
+	ttfb: 0,
+	timestamp: Date.now()
+};
 
-export const metrics = writable<MetricState>(createMetricState(firstMetric));
+export const metrics = writable<MetricState>(
+	createMetricState(initialMetric)
+);
 
-export const metricHistory = writable<WebMetric[]>([firstMetric]);
+export const metricHistory = writable<WebMetric[]>([]);
 
 export const averageLCP = derived(metricHistory, ($history) => {
 	if ($history.length === 0) return 0;
@@ -50,8 +57,7 @@ export const averageLCP = derived(metricHistory, ($history) => {
 	return total / $history.length;
 });
 
-export function updateMetrics(): void {
-	const newMetric = generateMetric();
+export function updateMetrics(newMetric: WebMetric): void {
 	const newState = createMetricState(newMetric);
 
 	metrics.set(newState);
