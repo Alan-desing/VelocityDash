@@ -1,41 +1,50 @@
 <script lang="ts">
 	import MetricCard from './MetricCard.svelte';
 	import { metrics } from '$lib/stores/metrics';
+	import { fade } from 'svelte/transition';
 
 	const getTrend = () => Math.random() * 10 - 5;
 </script>
 
 <section class="kpi-grid">
-	<MetricCard
-		title="LCP"
-		value={$metrics.lcp}
-		unit="ms"
-		status={$metrics.lcpStatus}
-		trend={getTrend()}
-	/>
+	<div transition:fade={{ duration: 500 }}>
+		<MetricCard
+			title="LCP"
+			value={$metrics.lcp}
+			unit="ms"
+			status={$metrics.lcpStatus}
+			trend={getTrend()}
+		/>
+	</div>
 
-	<MetricCard
-		title="FID"
-		value={$metrics.fid}
-		unit="ms"
-		status={$metrics.fidStatus}
-		trend={getTrend()}
-	/>
+	<div transition:fade={{ duration: 600, delay: 100 }}>
+		<MetricCard
+			title="FID"
+			value={$metrics.fid}
+			unit="ms"
+			status={$metrics.fidStatus}
+			trend={getTrend()}
+		/>
+	</div>
 
-	<MetricCard
-		title="CLS"
-		value={$metrics.cls}
-		status={$metrics.clsStatus}
-		trend={getTrend()}
-	/>
+	<div transition:fade={{ duration: 700, delay: 200 }}>
+		<MetricCard
+			title="CLS"
+			value={$metrics.cls}
+			status={$metrics.clsStatus}
+			trend={getTrend()}
+		/>
+	</div>
 
-	<MetricCard
-		title="TTFB"
-		value={$metrics.ttfb}
-		unit="ms"
-		status={$metrics.ttfbStatus}
-		trend={getTrend()}
-	/>
+	<div transition:fade={{ duration: 800, delay: 300 }}>
+		<MetricCard
+			title="TTFB"
+			value={$metrics.ttfb}
+			unit="ms"
+			status={$metrics.ttfbStatus}
+			trend={getTrend()}
+		/>
+	</div>
 </section>
 
 <style>

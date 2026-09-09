@@ -7,6 +7,7 @@
 	import BarChart from '$lib/components/charts/BarChart.svelte';
 	import { updateMetrics } from '$lib/stores/metrics';
 	import { connectWebSocket } from '$lib/services/websocket';
+	import { fly } from 'svelte/transition';
 
 	onMount(() => {
 	const disconnect = connectWebSocket((metric) => {
@@ -47,14 +48,23 @@
 		<KpiGrid />
 
 		<div class="charts">
-			<LineChart />
-
-			<div class="chart-grid">
-				<GaugeChart />
-				<BarChart />
+			<div transition:fly={{ y: 30, duration: 600 }}>
+				<LineChart />
 			</div>
 
-			<Heatmap />
+			<div class="chart-grid">
+				<div transition:fly={{ x: -30, duration: 600, delay: 150 }}>
+					<GaugeChart />
+				</div>
+
+				<div transition:fly={{ x: 30, duration: 600, delay: 250 }}>
+					<BarChart />
+				</div>
+			</div>
+
+			<div transition:fly={{ y: 30, duration: 600, delay: 350 }}>
+				<Heatmap />
+			</div>
 		</div>
 	</section>
 </main>

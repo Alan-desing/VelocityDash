@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import type { MetricStatus } from '$lib/types/metrics';
 
 	let {
@@ -32,9 +33,14 @@
 	<div class="card-header">
 		<h2>{title}</h2>
 
-		<span class={`status ${statusClass[status]}`}>
-			{statusLabels[status]}
-		</span>
+		{#key status}
+			<span
+				class={`status ${statusClass[status]}`}
+				transition:fade={{ duration: 250 }}
+			>
+				{statusLabels[status]}
+			</span>
+		{/key}
 	</div>
 
 	<div class="value">
