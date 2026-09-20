@@ -57,6 +57,44 @@ export const averageLCP = derived(metricHistory, ($history) => {
 	return total / $history.length;
 });
 
+export const averageFID = derived(metricHistory, ($history) => {
+	if ($history.length === 0) return 0;
+
+	const total = $history.reduce((sum, metric) => sum + metric.fid, 0);
+
+	return total / $history.length;
+});
+
+export const averageCLS = derived(metricHistory, ($history) => {
+	if ($history.length === 0) return 0;
+
+	const total = $history.reduce((sum, metric) => sum + metric.cls, 0);
+
+	return total / $history.length;
+});
+
+export const averageTTFB = derived(metricHistory, ($history) => {
+	if ($history.length === 0) return 0;
+
+	const total = $history.reduce((sum, metric) => sum + metric.ttfb, 0);
+
+	return total / $history.length;
+});
+
+export const overallStatus = derived(metrics, ($metrics): MetricStatus => {
+	const statuses = [
+		$metrics.lcpStatus,
+		$metrics.fidStatus,
+		$metrics.clsStatus,
+		$metrics.ttfbStatus
+	];
+
+	if (statuses.includes('bad')) return 'bad';
+	if (statuses.includes('warning')) return 'warning';
+
+	return 'good';
+});
+
 export function updateMetrics(newMetric: WebMetric): void {
 	const newState = createMetricState(newMetric);
 
