@@ -8,6 +8,7 @@
 	import { updateMetrics } from '$lib/stores/metrics';
 	import { connectWebSocket } from '$lib/services/websocket';
 	import { fly } from 'svelte/transition';
+	import TimeRangeFilter from '$lib/components/ui/TimeRangeFilter.svelte';
 
 	onMount(() => {
 	const disconnect = connectWebSocket((metric) => {
@@ -46,6 +47,8 @@
 		<h2>Rendimiento actual</h2>
 
 		<KpiGrid />
+
+		<TimeRangeFilter />
 
 		<div class="charts">
 			<div transition:fly={{ y: 30, duration: 600 }}>

@@ -49,7 +49,29 @@ export const metrics = writable<MetricState>(
 
 export const metricHistory = writable<WebMetric[]>([]);
 
-export const averageLCP = derived(metricHistory, ($history) => {
+export type TimeRange = '1h' | '24h' | '7d' | '30d';
+
+export const timeRange = writable<TimeRange>('1h');
+
+export const filteredHistory = derived(
+	[metricHistory, timeRange],
+	([$history, $timeRange]) => {
+		const now = Date.now();
+
+		const rangeInMs: Record<TimeRange, number> = {
+			'1h': 60 * 60 * 1000,
+			'24h': 24 * 60 * 60 * 1000,
+			'7d': 7 * 24 * 60 * 60 * 1000,
+			'30d': 30 * 24 * 60 * 60 * 1000
+		};
+
+		const startTime = now - rangeInMs[$timeRange];
+
+		return $history.filter((metric) => metric.timestamp >= startTime);
+	}
+);
+
+export const averageLCP = derived(filteredHistory, ($history) => {
 	if ($history.length === 0) return 0;
 
 	const total = $history.reduce((sum, metric) => sum + metric.lcp, 0);
@@ -57,7 +79,7 @@ export const averageLCP = derived(metricHistory, ($history) => {
 	return total / $history.length;
 });
 
-export const averageFID = derived(metricHistory, ($history) => {
+export const averageFID = derived(filteredHistory, ($history) => {
 	if ($history.length === 0) return 0;
 
 	const total = $history.reduce((sum, metric) => sum + metric.fid, 0);
@@ -65,7 +87,7 @@ export const averageFID = derived(metricHistory, ($history) => {
 	return total / $history.length;
 });
 
-export const averageCLS = derived(metricHistory, ($history) => {
+export const averageCLS = derived(filteredHistory, ($history) => {
 	if ($history.length === 0) return 0;
 
 	const total = $history.reduce((sum, metric) => sum + metric.cls, 0);
@@ -73,7 +95,7 @@ export const averageCLS = derived(metricHistory, ($history) => {
 	return total / $history.length;
 });
 
-export const averageTTFB = derived(metricHistory, ($history) => {
+export const averageTTFB = derived(filteredHistory, ($history) => {
 	if ($history.length === 0) return 0;
 
 	const total = $history.reduce((sum, metric) => sum + metric.ttfb, 0);
