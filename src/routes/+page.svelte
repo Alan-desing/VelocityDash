@@ -11,6 +11,7 @@
 	import TimeRangeFilter from '$lib/components/ui/TimeRangeFilter.svelte';
 	import AlertNotification from '$lib/components/ui/AlertNotification.svelte';
 	import AlertSettings from '$lib/components/ui/AlertSettings.svelte';
+	import PdfExportButton from '$lib/components/ui/PdfExportButton.svelte';
 
 	onMount(() => {
 	const disconnect = connectWebSocket((metric) => {
@@ -39,13 +40,17 @@
 			</p>
 		</div>
 
-		<div class="live">
-			<span></span>
-			En tiempo real
+		<div class="header-actions">
+			<PdfExportButton />
+
+			<div class="live">
+				<span></span>
+				En tiempo real
+			</div>
 		</div>
 	</header>
 
-	<section class="dashboard">
+	<section class="dashboard" id="dashboard-export">
 		<h2>Rendimiento actual</h2>
 
 		<KpiGrid />
@@ -174,6 +179,12 @@
 		font-size: 1.2rem;
 	}
 
+	.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	}
+
 	@media (max-width: 600px) {
 		main {
 			padding: 1rem;
@@ -187,5 +198,10 @@
 		h1 {
 			font-size: 2rem;
 		}
-	}
+		
+		.header-actions {
+			width: 100%;
+			justify-content: space-between;
+		}
+			}
 </style>
