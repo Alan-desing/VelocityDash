@@ -49,6 +49,20 @@ export const metrics = writable<MetricState>(
 
 export const metricHistory = writable<WebMetric[]>([]);
 
+export interface AlertThresholds {
+	lcp: number;
+	fid: number;
+	cls: number;
+	ttfb: number;
+}
+
+export const alertThresholds = writable<AlertThresholds>({
+	lcp: 4000,
+	fid: 300,
+	cls: 0.25,
+	ttfb: 1800
+});
+
 export type TimeRange = '1h' | '24h' | '7d' | '30d';
 
 export const timeRange = writable<TimeRange>('1h');
@@ -116,6 +130,53 @@ export const overallStatus = derived(metrics, ($metrics): MetricStatus => {
 
 	return 'good';
 });
+
+export interface MetricAlert {
+	metric: string;
+	value: number;
+	message: string;
+}
+
+export const alerts = derived(
+	[metrics, alertThresholds],
+	([$metrics, $thresholds]): MetricAlert[] => {
+		const currentAlerts: MetricAlert[] = [];
+
+		if ($metrics.lcp > $thresholds.lcp) {
+			currentAlerts.push({
+				metric: 'LCP',
+				value: $metrics.lcp,
+				message: 'El LCP superó el umbral configurado.'
+			});
+		}
+
+		if ($metrics.fid > $thresholds.fid) {
+			currentAlerts.push({
+				metric: 'FID',
+				value: $metrics.fid,
+				message: 'El FID superó el umbral configurado.'
+			});
+		}
+
+		if ($metrics.cls > $thresholds.cls) {
+			currentAlerts.push({
+				metric: 'CLS',
+				value: $metrics.cls,
+				message: 'El CLS superó el umbral configurado.'
+			});
+		}
+
+		if ($metrics.ttfb > $thresholds.ttfb) {
+			currentAlerts.push({
+				metric: 'TTFB',
+				value: $metrics.ttfb,
+				message: 'El TTFB superó el umbral configurado.'
+			});
+		}
+
+		return currentAlerts;
+	}
+);
 
 export function updateMetrics(newMetric: WebMetric): void {
 	const newState = createMetricState(newMetric);

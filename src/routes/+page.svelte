@@ -9,6 +9,8 @@
 	import { connectWebSocket } from '$lib/services/websocket';
 	import { fly } from 'svelte/transition';
 	import TimeRangeFilter from '$lib/components/ui/TimeRangeFilter.svelte';
+	import AlertNotification from '$lib/components/ui/AlertNotification.svelte';
+	import AlertSettings from '$lib/components/ui/AlertSettings.svelte';
 
 	onMount(() => {
 	const disconnect = connectWebSocket((metric) => {
@@ -47,6 +49,10 @@
 		<h2>Rendimiento actual</h2>
 
 		<KpiGrid />
+
+		<AlertNotification />
+		
+		<AlertSettings />
 
 		<TimeRangeFilter />
 
